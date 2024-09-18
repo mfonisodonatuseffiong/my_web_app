@@ -1,0 +1,67 @@
+<!-- templates/categories.html -->
+{% extends "base.html" %}
+{% block content %}
+    <h1>Categories</h1>
+    <a href="{{ url_for('add_category') }}">Add Category</a>
+    <ul>
+        {% for category in categories %}
+            <li>{{ category.name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+<!-- templates/add_category.html -->
+{% extends "base.html" %}
+{% block content %}
+    <h1>Add Category</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.name.label }}
+            {{ form.name(size=32) }}
+        </div>
+        <div>
+            <button type="submit">Add Category</button>
+        </div>
+    </form>
+{% endblock %}
+
+<!-- templates/products.html -->
+{% extends "base.html" %}
+{% block content %}
+    <h1>Products</h1>
+    <a href="{{ url_for('add_product') }}">Add Product</a>
+    <ul>
+        {% for product in products %}
+            <li>{{ product.name }} - {{ product.price }} - {{ product.category.name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+<!-- templates/add_product.html -->
+{% extends "base.html" %}
+{% block content %}
+    <h1>Add Product</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.name.label }}
+            {{ form.name(size=32) }}
+        </div>
+        <div>
+            {{ form.description.label }}
+            {{ form.description(rows=4, cols=40) }}
+        </div>
+        <div>
+            {{ form.price.label }}
+            {{ form.price() }}
+        </div>
+        <div>
+            {{ form.category.label }}
+            {{ form.category() }}
+        </div>
+        <div>
+            <button type="submit">Add Product</button>
+        </div>
+    </form>
+{% endblock %}

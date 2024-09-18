@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="EASYSHOP - Simple and convenient shopping experience.">
+    <meta name="keywords" content="E-commerce, shopping, online store">
+    <title>{% block title %}Flask App{% endblock %}</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        /* Global Styles */
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: scroll; /* Enable vertical scrolling */
+    overflow-x: hidden;
+    line-height: 1.5;
+    font-family: 'Poppins', sans-serif;
+    background: url('{{ url_for("static", filename="images/back1.jpg") }}') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Navbar Styles */
+.navbar-custom {
+    background-color: #4fb3bf; /* Jumberton-like soft teal */
+    padding: 8px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+
+.navbar-nav .nav-link {
+    color: #fff;
+    font-size: 1.3rem;
+}
+
+.navbar-brand {
+    font-size: 2.0rem;
+    font-weight: bolder;
+    padding-left: 3%;
+}
+
+.navbar-custom .navbar-nav .nav-link:hover {
+    color: #f8f9fa;
+}
+
+.navbar-toggler {
+    border-color: rgba(172, 18, 18, 0.1);
+}
+
+/* Carousel Styles */
+.carousel-item {
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-item h1 {
+    color: #ffffff;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* Modal Styles */
+.form-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    max-width: 90%;
+    display: none;
+    z-index: 1050;
+    overflow-y: auto;
+    max-height: 80%;
+}
+
+.form-modal.show {
+    display: block;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+
+.form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 1040;
+}
+
+/* Content Styles */
+.content {
+    flex: 1;
+    padding: 60px 15px 15px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    min-height: calc(100vh - 70px); /* Adjust for the height of the fixed navbar */
+}
+
+/* Search Form Styles */
+.search-form {
+    display: flex;
+    align-items: center;
+}
+
+.search-form input[type="text"] {
+    border-radius: 20px;
+    padding: 5px 15px;
+    border: none;
+    outline: none;
+}
+
+.search-form button {
+    background-color: #fff;
+    border: none;
+    border-radius: 20px;
+    margin-left: 5px;
+    padding: 5px 10px;
+}
+
+/* Product Grid Styles */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjust min width for better visibility */
+    gap: 20px;
+}
+
+/* Product Card Styles */
+.product-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease; /* Smooth hover effect */
+    animation: float 3s ease-in-out infinite; /* Floating effect */
+}
+
+/* Floating Effect */
+@keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
+}
+
+/* Hover Effect */
+.product-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.product-card img {
+    transition: transform 0.3s ease;
+}
+
+.product-card img:hover {
+    transform: scale(1.1); /* Slight zoom on the image */
+}
+
+/* Product Image Styles */
+.product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Product Info Styles */
+.product-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 15px;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.product-title {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.product-price {
+    font-size: 1rem;
+    color: #e74c3c;
+}
+
+/* Buy Button Styles */
+.btn-buy {
+    margin-top: 10px;
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-buy:hover {
+    background-color: #c0392b;
+}
+
+/* Footer Styles */
+.footer {
+    background-color: #4fb3bf; /* Jumberton-like soft teal */
+    padding: 40px 0; /* Adjusted padding for a standard footer size */
+    color: #ffffff;
+    text-align: center;
+    position: relative;
+}
+
+.footer-col {
+    width: 25%;
+    padding: 0 15px;
+    margin-bottom: 20px; /* Spacing between footer columns */
+}
+
+.footer-col h4 {
+    font-size: 18px;
+    color: #ffffff;
+    text-transform: capitalize;
+    margin-bottom: 25px; /* Reduced margin for a cleaner look */
+    font-weight: 500;
+    position: relative;
+}
+
+.footer-col h4::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    background-color: #c91e1e; /* Accent color */
+    height: 2px;
+    width: 50px;
+}
+
+.footer-col ul {
+    list-style: none; /* Removes bullets or numbers from the list */
+    padding: 0;
+    margin: 0;
+}
+
+.footer-col ul li:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.footer-col ul li a {
+    font-size: 16px;
+    color: #ffffff; /* White for better contrast */
+    text-decoration: none;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.footer-col ul li a:hover {
+    color: #24262b; /* Dark background color on hover */
+    padding-left: 8px;
+}
+
+.footer-col .social-links a {
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 0 10px 10px 0;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 50%;
+    color: #ffffff;
+    transition: all 0.5s ease;
+}
+
+.footer-col .social-links a:hover {
+    color: #24262b;
+    background-color: #ffffff;
+}
+
+/* Cart Styles */
+.cart-container {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px auto;
+    max-width: 1200px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+</style>
+</head>
+<body>
+
+    <!-- Fixed Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <a class="navbar-brand" href="{{ url_for('main.home') }}">Home</a>
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main.products') }}">Products</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main.contact') }}">Contact</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Sticky Navigation Bar -->
+    <nav class="navbar sticky-top navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('main.home') }}">EASYSHOP</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto w-100 justify-content-between">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ url_for('main.home') }}">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.about') }}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.contact') }}">Contact</a>
+                    </li>
+    
+                    
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('main.account') }}">Account</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('main.logout') }}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showForm('login')">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showForm('register')">Register</a>
+                        </li>
+                    {% endif %}
+                    <!-- Search Form -->
+                    <li class="nav-item">
+                        <form class="form-inline my-2 my-lg-0" action="{{ url_for('main.search') }}" method="GET">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search products" aria-label="Search" name="query">
+                            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+                        
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+  <!-- Page2 Section -->
+<section class="page2">
+    <div class="container">
+        <h1 class="text-center danger text-pink py-4">Our Products</h1>
+        <div class="row">
+            <!-- Product 1 -->
+            <div class="col-md-4 d-flex align-items-stretch mb-4">
+                <div class="card">
+                    <img src="{{ url_for('static', filename='images/watch.jpg') }}" class="card-img-top" alt="Men's Wrist Watch">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Men's Wrist Watch</h5>
+                        <p class="card-text">&#8358;650,600.00</p>
+                        <!-- Add the onclick attribute to call the addToCart function with the product name and price -->
+                        <a href="#" class="btn btn-primary mt-auto" onclick="addToCart('Men\'s Wrist Watch', 650600)">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+
+          <!-- Product 2 -->
+<div class="col-md-4 d-flex align-items-stretch mb-4">
+    <div class="card">
+        <img src="{{ url_for('static', filename='images/bag.jpg') }}" class="card-img-top" alt="lady's handbag">
+        <div class="card-body d-flex flex-column">
+            <h5 class="card-title">Lady's Handbag</h5>
+            <p class="card-text">&#8358;450,600.00</p>
+            <!-- Add the onclick attribute to call the addToCart function with the product name and price -->
+            <a href="#" class="btn btn-primary mt-auto" onclick="addToCart('Lady\'s Handbag', 450600)">Add to Cart</a>
+        </div>
+    </div>
+</div>
+
+<!-- Product 3 -->
+<div class="col-md-4 d-flex align-items-stretch mb-4">
+    <div class="card">
+        <img src="{{ url_for('static', filename='images/pc.jpg') }}" class="card-img-top" alt="MacBook">
+        <div class="card-body d-flex flex-column">
+            <h5 class="card-title">MacBook</h5>
+            <p class="card-text">&#8358;450,600.00</p>
+            <!-- Add the onclick attribute to call the addToCart function with the product name and price -->
+            <a href="#" class="btn btn-primary mt-auto" onclick="addToCart('MacBook', 450600)">Add to Cart</a>
+        </div>
+    </div>
+</div>
+
+
+       <!-- Product 4 -->
+<div class="col-md-4 d-flex align-items-stretch mb-4">
+    <div class="card">
+        <img src="{{ url_for('static', filename='images/perfume.jpg') }}" class="card-img-top" alt="Givenchy Perfume">
+        <div class="card-body d-flex flex-column">
+            <h5 class="card-title">Givenchy</h5>
+            <p class="card-text">&#8358;450,600.00</p>
+            <!-- Add the onclick attribute to call the addToCart function with the product name and price -->
+            <a href="#" class="btn btn-primary mt-auto" onclick="addToCart('Givenchy Perfume', 450600)">Add to Cart</a>
+        </div>
+    </div>
+</div>
+
+
+             <!-- Product 5 -->
+<div class="col-md-4 d-flex align-items-stretch mb-4">
+    <div class="card">
+        <img src="{{ url_for('static', filename='images/versace.jpg') }}" class="card-img-top" alt="Versace">
+        <div class="card-body d-flex flex-column">
+            <h5 class="card-title">Versace</h5>
+            <p class="card-text">&#8358;450,600.00</p>
+            <!-- Add the onclick attribute to call the addToCart function with the product name and price -->
+            <a href="#" class="btn btn-primary mt-auto" onclick="addToCart('Versace', 450600)">Add to Cart</a>
+        </div>
+    </div>
+</div>
+
+
+      <!-- Product 6 -->
+<div class="col-md-4 d-flex align-items-stretch mb-4">
+    <div class="card">
+        <img src="{{ url_for('static', filename='images/dress.jpg') }}" class="card-img-top" alt="Women dress">
+        <div class="card-body d-flex flex-column">
+            <h5 class="card-title">Women dress</h5>
+            <p class="card-text">&#8358;150,600.00</p>
+            <!-- Add the onclick attribute to call the addToCart function with the product name and price -->
+            <a href="#" class="btn btn-primary mt-auto" onclick="addToCart('Women dress', 150600)">Add to Cart</a>
+        </div>
+    </div>
+</div>
+
+</section>
+
+<!-- Form Overlay for Cart -->
+<div id="form-overlay" style="display:none;">
+    <div class="form-modal" id="cart-modal">
+        <h2 class="cart-title">Your Cart</h2>
+        <!-- Cart items will be dynamically inserted here -->
+        <div id="cart-items" class="cart-items"></div>
+        <!-- Total amount -->
+        <div id="cart-total" class="cart-total"></div>
+        <!-- Button to place an order -->
+        <div class="cart-actions">
+            <button onclick="placeOrder()">Place Order</button>
+            <!-- Button to close the cart -->
+            <button onclick="hideForm('cart')">Close</button>
+        </div>
+    </div>
+</div>
+
+    <!-- Login Modal -->
+    <div class="form-overlay" id="form-overlay" onclick="hideForm()"></div>
+    <div class="form-modal" id="login">
+        <div class="modal-content">
+            <button onclick="hideForm()">Close</button>
+            <h2>Login</h2>
+            <form action="{{ url_for('main.login') }}" method="post">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="form-modal" id="register">
+        <div class="modal-content">
+            <button onclick="hideForm()">Close</button>
+            <h2>Register</h2>
+            <form action="{{ url_for('main.register') }}" method="post">
+                <div class="form-group">
+                    <label for="reg-username">Username:</label>
+                    <input type="text" id="reg-username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Password:</label>
+                    <input type="password" id="reg-password" name="password" required>
+                </div>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container mt-3"></div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash">
+                {% for category, message in messages %}
+                    <div class="{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+        </div>
+        
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="footer-col">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Our Services</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Affiliate Program</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Get Help</h4>
+                        <ul>
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">Shipping</a></li>
+                            <li><a href="#">Returns</a></li>
+                            <li><a href="#">Order Status</a></li>
+                            <li><a href="#">Payment Options</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Online Shop</h4>
+                        <ul>
+                            <li><a href="#">Watch</a></li>
+                            <li><a href="#">Bag</a></li>
+                            <li><a href="#">Shoes</a></li>
+                            <li><a href="#">Dress</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Follow Us</h4>
+                        <div class="social-links">
+                            <a href="https://github.com/mfonisodonatuseffiong" target="_blank"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Copyright Section -->
+                <div class="text-center mt-4">
+                    <p>&copy; 2024 EasyShop. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+   <!-- Bootstrap JS and dependencies -->
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+
+<script>
+// Initialize the cart from localStorage or start with an empty cart
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+// Function to add items to the cart
+function addToCart(productName, productPrice) {
+    // Create a new item object
+    const item = {
+        name: productName,
+        price: productPrice,
+        quantity: 1
+    };
+
+    // Check if the item is already in the cart
+    const existingItem = cart.find(cartItem => cartItem.name === productName);
+    if (existingItem) {
+        // If the item already exists, increase the quantity
+        existingItem.quantity += 1;
+    } else {
+        // Otherwise, add the new item to the cart
+        cart.push(item);
+    }
+
+    // Save the updated cart to localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    // Display the cart to the user
+    updateCartView();
+    showForm('cart-modal');  // Show the cart modal
+}
+
+// Function to display the cart contents dynamically
+function updateCartView() {
+    const cartItemsContainer = document.getElementById('cart-items');
+    cartItemsContainer.innerHTML = ''; // Clear the cart display before updating
+
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+    } else {
+        cart.forEach((item, index) => {
+            const itemElement = document.createElement('div');
+            itemElement.innerHTML = `${item.name} - ₦${item.price.toLocaleString()} x ${item.quantity} 
+            <button onclick="removeFromCart(${index})">Remove</button>`;
+            cartItemsContainer.appendChild(itemElement);
+        });
+
+        // Update total amount
+        const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        document.getElementById('cart-total').innerText = `Total: ₦${total.toLocaleString()}`;
+    }
+}
+
+// Function to remove items from the cart
+function removeFromCart(itemIndex) {
+    cart.splice(itemIndex, 1); // Remove the item from the cart array
+    localStorage.setItem('cart', JSON.stringify(cart)); // Update localStorage
+    updateCartView(); // Refresh the cart display
+}
+
+// Function to handle placing the order
+function placeOrder() {
+    if (cart.length > 0) {
+        alert('Order placed successfully!');
+        cart = []; // Clear the cart after placing the order
+        localStorage.removeItem('cart'); // Clear the cart from localStorage
+        hideForm(); // Close the cart modal
+    } else {
+        alert('Your cart is empty!');
+    }
+}
+
+// Function to show a form modal
+function showForm(formType) {
+    document.getElementById('form-overlay').style.display = 'block';
+    document.getElementById(formType).classList.add('show');
+    updateCartView(); // Ensure cart is updated once the modal is visible
+}
+
+// Function to hide all form modals
+function hideForm() {
+    document.getElementById('form-overlay').style.display = 'none';
+    document.querySelectorAll('.form-modal').forEach(function(modal) {
+        modal.classList.remove('show');
+    });
+}
+
+// Example function to update cart items dynamically (for demonstration purposes)
+function updateCartItems(items) {
+    const cartItemsContainer = document.getElementById('cart-items');
+    cartItemsContainer.innerHTML = ''; // Clear existing items
+
+    items.forEach(item => {
+        const cartItem = document.createElement('div');
+        cartItem.classList.add('cart-item');
+        cartItem.innerHTML = `
+            <img src="${item.image}" alt="${item.title}">
+            <div class="cart-item-details">
+                <div class="cart-item-title">${item.title}</div>
+                <div class="cart-item-price">₦${item.price.toLocaleString()}</div>
+                <div class="cart-item-quantity">Qty: ${item.quantity}</div>
+            </div>
+        `;
+        cartItemsContainer.appendChild(cartItem);
+    });
+
+    // Update total amount
+    const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    document.getElementById('cart-total').innerText = `Total: ₦${total.toLocaleString()}`;
+}
+
+// Example usage (to be removed or modified as needed)
+const sampleItems = [
+    { image: 'path/to/watch.jpg', title: 'Product 1', price: 1000, quantity: 1 },
+    { image: 'path/to/bag.jpg', title: 'Product 2', price: 2000, quantity: 2 }
+];
+updateCartItems(sampleItems);
+
+function proceedToPayment() {
+    alert('Order placed successfully!');
+    window.location.href = 'checkout.html'; // Redirect to the checkout page
+}
+</script>
+</body>
+</html>

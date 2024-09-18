@@ -1,0 +1,40 @@
+
+2024-09-15 22:46:20,271 - app.routes - INFO - Rendering contact page.
+2024-09-15 22:46:52,541 - app.routes - INFO - User ID 1 logged out.
+2024-09-15 22:46:52,562 - app.routes - INFO - Rendering home page.
+2024-09-15 22:47:00,866 - app.routes - INFO - User ID 1 logged in successfully.
+2024-09-15 22:47:00,877 - app.routes - INFO - Rendering home page.
+2024-09-15 22:47:03,928 - app.routes - INFO - User 1 accessed account page.
+2024-09-15 22:47:21,392 - app.routes - INFO - Rendering home page.
+2024-09-15 22:47:45,659 - app.routes - INFO - Rendering contact page.
+2024-09-15 22:48:23,592 - app.routes - INFO - Contact submission received from mfoniso (kaytwobaba@gmai.com): hi EasyShop, i just place an order
+2024-09-16 11:32:16,186 - app.routes - INFO - Rendering home page.
+2024-09-16 11:32:20,688 - app.routes - INFO - Rendering about page.
+2024-09-16 11:32:36,612 - app.routes - INFO - Rendering home page.
+2024-09-16 11:32:38,846 - app.routes - INFO - Rendering about page.
+2024-09-16 11:32:41,930 - app.routes - INFO - Rendering home page.
+2024-09-16 11:32:43,905 - app.routes - INFO - Rendering contact page.
+2024-09-16 11:56:20,856 - app.routes - INFO - Rendering contact page.
+2024-09-16 12:07:48,222 - app.routes - INFO - Rendering home page.
+2024-09-16 12:09:11,485 - app.routes - INFO - Rendering home page.
+2024-09-16 12:11:45,140 - app.routes - INFO - Rendering home page.
+2024-09-16 12:14:20,683 - app.routes - INFO - Rendering home page.
+2024-09-16 12:15:56,780 - app.routes - INFO - Rendering home page.
+2024-09-16 12:16:49,713 - app.routes - INFO - Rendering home page.
+2024-09-16 12:18:16,219 - app.routes - INFO - Rendering home page.
+2024-09-16 13:05:00,636 - app.routes - INFO - Rendering home page.
+2024-09-16 13:10:29,222 - app.routes - INFO - Rendering home page.
+2024-09-16 13:10:30,692 - app.routes - INFO - Rendering about page.
+2024-09-16 13:10:41,276 - app.routes - INFO - Rendering contact page.
+2024-09-16 13:12:17,415 - app.routes - INFO - New user with email aniedi@gmail.com registered successfully.
+2024-09-16 13:12:44,538 - app.routes - INFO - User ID 5 logged in successfully.
+2024-09-16 13:12:44,548 - app.routes - INFO - Rendering home page.
+2024-09-16 13:12:59,378 - app.routes - INFO - User 5 accessed account page.
+2024-09-16 13:13:19,456 - app.routes - INFO - Rendering home page.
+2024-09-16 13:14:37,471 - app.routes - INFO - Rendering contact page.
+2024-09-16 13:15:31,753 - app.routes - INFO - Contact submission received from aniedi (aniedi@gmail.com): Goodafternoon EasyShop, i just placed an order
+2024-09-16 13:15:31,763 - app.routes - INFO - Rendering contact page.
+2024-09-16 13:16:42,874 - app.routes - INFO - Rendering contact page.
+2024-09-16 13:16:45,695 - app.routes - INFO - Rendering home page.
+2024-09-16 13:17:53,971 - app.routes - INFO - User ID 5 logged out.
+2024-09-16 13:17:53,981 - app.routes - INFO - Rendering home page.
